@@ -98,6 +98,7 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
+						"folderPath": "population",
 						"fileSystem": "raw"
 					},
 					"columnDelimiter": "\t",
