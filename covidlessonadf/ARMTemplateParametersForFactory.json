@@ -1,0 +1,18 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "covidlessonadf"
+		},
+		"ls_blob_covidlessonstorage_connectionString": {
+			"value": ""
+		},
+		"ls_blob_udemylessondatalake_accountKey": {
+			"value": ""
+		},
+		"ls_blob_udemylessondatalake_properties_typeProperties_url": {
+			"value": "https://udemylessondatalake.dfs.core.windows.net/"
+		}
+	}
+}
