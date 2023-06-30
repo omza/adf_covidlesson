@@ -49,13 +49,25 @@
 				"inputs": [
 					{
 						"referenceName": "ds_edcd_casesanddeath_raw_csv",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"relativeUrl": {
+								"value": "@variables('SourceRelativeUrl')",
+								"type": "Expression"
+							}
+						}
 					}
 				],
 				"outputs": [
 					{
 						"referenceName": "ds_ecdc_datalake",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"FileName": {
+								"value": "@variables('SinkFileName')",
+								"type": "Expression"
+							}
+						}
 					}
 				]
 			}
