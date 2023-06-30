@@ -100,7 +100,7 @@
 						"userProperties": [],
 						"typeProperties": {
 							"expression": {
-								"value": "@equals(activity('Get File Metadata').output.columnCount,13)",
+								"value": "@equals(activity('Get File Metadata').output.columnCount, 13)",
 								"type": "Expression"
 							},
 							"ifFalseActivities": [
@@ -111,7 +111,7 @@
 									"userProperties": [],
 									"typeProperties": {
 										"message": {
-											"value": "@\"Population File ColumnCount Error. \" + activity('Get File Metadata').output.columnCount",
+											"value": "@activity('Get File Metadata').output.columnCount",
 											"type": "Expression"
 										},
 										"errorCode": "500"
@@ -178,6 +178,39 @@
 											"parameters": {}
 										}
 									]
+								},
+								{
+									"name": "Delete Population Source File",
+									"type": "Delete",
+									"dependsOn": [
+										{
+											"activity": "Copy Population Data",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"dataset": {
+											"referenceName": "ds_population_by_age_tsv_gz",
+											"type": "DatasetReference",
+											"parameters": {}
+										},
+										"enableLogging": false,
+										"storeSettings": {
+											"type": "AzureBlobStorageReadSettings",
+											"recursive": false,
+											"enablePartitionDiscovery": false
+										}
+									}
 								}
 							]
 						}
