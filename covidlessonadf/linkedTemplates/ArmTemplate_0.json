@@ -425,63 +425,9 @@
 							"isSequential": true,
 							"activities": [
 								{
-									"name": "Set sourceRelativeURL",
-									"type": "SetVariable",
-									"dependsOn": [],
-									"policy": {
-										"timeout": "0.12:00:00",
-										"retry": 0,
-										"retryIntervalInSeconds": 30,
-										"secureOutput": false,
-										"secureInput": false
-									},
-									"userProperties": [],
-									"typeProperties": {
-										"variableName": "sourceRelativeURL",
-										"value": {
-											"value": "@item().sourceRelativeURL",
-											"type": "Expression"
-										}
-									}
-								},
-								{
-									"name": "sinkFileName",
-									"type": "SetVariable",
-									"dependsOn": [
-										{
-											"activity": "Set sourceRelativeURL",
-											"dependencyConditions": [
-												"Succeeded"
-											]
-										}
-									],
-									"policy": {
-										"timeout": "0.12:00:00",
-										"retry": 0,
-										"retryIntervalInSeconds": 30,
-										"secureOutput": false,
-										"secureInput": false
-									},
-									"userProperties": [],
-									"typeProperties": {
-										"variableName": "sinkFileName",
-										"value": {
-											"value": "@item().SinkFileName",
-											"type": "Expression"
-										}
-									}
-								},
-								{
 									"name": "Copy ECDC Data",
 									"type": "Copy",
-									"dependsOn": [
-										{
-											"activity": "sinkFileName",
-											"dependencyConditions": [
-												"Succeeded"
-											]
-										}
-									],
+									"dependsOn": [],
 									"policy": {
 										"timeout": "0.12:00:00",
 										"retry": 0,
@@ -528,7 +474,7 @@
 											"type": "DatasetReference",
 											"parameters": {
 												"relativeUrl": {
-													"value": "@variables('sourceRelativeURL')",
+													"value": "@item().sourceRelativeURL",
 													"type": "Expression"
 												}
 											}
@@ -540,7 +486,7 @@
 											"type": "DatasetReference",
 											"parameters": {
 												"FileName": {
-													"value": "@variables('sinkFileName')",
+													"value": "@item().sinkFileName",
 													"type": "Expression"
 												}
 											}
@@ -554,14 +500,6 @@
 				"policy": {
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
-				},
-				"variables": {
-					"sourceRelativeURL": {
-						"type": "String"
-					},
-					"sinkFileName": {
-						"type": "String"
-					}
 				},
 				"annotations": []
 			},
