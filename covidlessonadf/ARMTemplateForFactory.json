@@ -23,14 +23,6 @@
 			"type": "string",
 			"defaultValue": "https://raw.githubusercontent.com/"
 		},
-		"tr_ecdc_casesanddeath_properties_pl_ingest_ecdc_data_parameters_SinkFileName": {
-			"type": "string",
-			"defaultValue": "cases_deaths.csv"
-		},
-		"tr_ecdc_casesanddeath_properties_pl_ingest_ecdc_data_parameters_SourceRelativeUrl": {
-			"type": "string",
-			"defaultValue": "cloudboxacademy/covid19/main/ecdc_data/cases_deaths.csv"
-		},
 		"tr_ingest_population_data_properties_typeProperties_scope": {
 			"type": "string",
 			"defaultValue": "/subscriptions/1b899802-159d-4833-9968-c48a5e4b486d/resourceGroups/udemy.covid.lesson/providers/Microsoft.Storage/storageAccounts/covidlessonstorage"
@@ -173,8 +165,8 @@
 			"properties": {
 				"activities": [
 					{
-						"name": "Copy ECDC Data",
-						"type": "Copy",
+						"name": "Lookup ECDC Source File Config",
+						"type": "Lookup",
 						"dependsOn": [],
 						"policy": {
 							"timeout": "0.12:00:00",
@@ -186,78 +178,187 @@
 						"userProperties": [],
 						"typeProperties": {
 							"source": {
-								"type": "DelimitedTextSource",
+								"type": "JsonSource",
 								"storeSettings": {
-									"type": "HttpReadSettings",
-									"requestMethod": "GET"
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
 								},
 								"formatSettings": {
-									"type": "DelimitedTextReadSettings"
+									"type": "JsonReadSettings"
 								}
 							},
-							"sink": {
-								"type": "DelimitedTextSink",
-								"storeSettings": {
-									"type": "AzureBlobFSWriteSettings"
-								},
-								"formatSettings": {
-									"type": "DelimitedTextWriteSettings",
-									"quoteAllText": true,
-									"fileExtension": ".txt"
-								}
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "ds_edcd_casesanddeath_raw_csv",
+							"dataset": {
+								"referenceName": "ds_ecdc_source_files_config",
 								"type": "DatasetReference",
-								"parameters": {
-									"relativeUrl": {
-										"value": "@pipeline().parameters.SourceRelativeUrl",
-										"type": "Expression"
-									}
-								}
+								"parameters": {}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "For Each ECDC Source file",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Lookup ECDC Source File Config",
+								"dependencyConditions": [
+									"Succeeded"
+								]
 							}
 						],
-						"outputs": [
-							{
-								"referenceName": "ds_ecdc_datalake",
-								"type": "DatasetReference",
-								"parameters": {
-									"FileName": {
-										"value": "@pipeline().parameters.SinkFileName",
-										"type": "Expression"
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Lookup ECDC Source File Config').output.value",
+								"type": "Expression"
+							},
+							"isSequential": true,
+							"activities": [
+								{
+									"name": "Set sourceRelativeURL",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "sourceRelativeURL",
+										"value": {
+											"value": "@item().sourceRelativeURL",
+											"type": "Expression"
+										}
 									}
+								},
+								{
+									"name": "sinkFileName",
+									"type": "SetVariable",
+									"dependsOn": [
+										{
+											"activity": "Set sourceRelativeURL",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "sinkFileName",
+										"value": {
+											"value": "@item().SinkFileName",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "Copy ECDC Data",
+									"type": "Copy",
+									"dependsOn": [
+										{
+											"activity": "sinkFileName",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "DelimitedTextSource",
+											"storeSettings": {
+												"type": "HttpReadSettings",
+												"requestMethod": "GET"
+											},
+											"formatSettings": {
+												"type": "DelimitedTextReadSettings"
+											}
+										},
+										"sink": {
+											"type": "DelimitedTextSink",
+											"storeSettings": {
+												"type": "AzureBlobFSWriteSettings"
+											},
+											"formatSettings": {
+												"type": "DelimitedTextWriteSettings",
+												"quoteAllText": true,
+												"fileExtension": ".txt"
+											}
+										},
+										"enableStaging": false,
+										"translator": {
+											"type": "TabularTranslator",
+											"typeConversion": true,
+											"typeConversionSettings": {
+												"allowDataTruncation": true,
+												"treatBooleanAsNumber": false
+											}
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "ds_edcd_raw",
+											"type": "DatasetReference",
+											"parameters": {
+												"relativeUrl": {
+													"value": "@variables('sourceRelativeURL')",
+													"type": "Expression"
+												}
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "ds_ecdc_datalake",
+											"type": "DatasetReference",
+											"parameters": {
+												"FileName": {
+													"value": "@variables('sinkFileName')",
+													"type": "Expression"
+												}
+											}
+										}
+									]
 								}
-							}
-						]
+							]
+						}
 					}
 				],
 				"policy": {
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
 				},
-				"parameters": {
-					"SinkFileName": {
-						"type": "string"
+				"variables": {
+					"sourceRelativeURL": {
+						"type": "String"
 					},
-					"SourceRelativeUrl": {
-						"type": "string"
+					"sinkFileName": {
+						"type": "String"
 					}
 				},
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ds_edcd_casesanddeath_raw_csv')]",
+				"[concat(variables('factoryId'), '/datasets/ds_ecdc_source_files_config')]",
+				"[concat(variables('factoryId'), '/datasets/ds_edcd_raw')]",
 				"[concat(variables('factoryId'), '/datasets/ds_ecdc_datalake')]"
 			]
 		},
@@ -536,7 +637,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ds_edcd_casesanddeath_raw_csv')]",
+			"name": "[concat(parameters('factoryName'), '/ds_edcd_raw')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -674,7 +775,7 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/tr_ecdc_casesanddeath')]",
+			"name": "[concat(parameters('factoryName'), '/tr_ingest_ecdc')]",
 			"type": "Microsoft.DataFactory/factories/triggers",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -686,10 +787,7 @@
 							"referenceName": "pl_ingest_ecdc_data",
 							"type": "PipelineReference"
 						},
-						"parameters": {
-							"SinkFileName": "[parameters('tr_ecdc_casesanddeath_properties_pl_ingest_ecdc_data_parameters_SinkFileName')]",
-							"SourceRelativeUrl": "[parameters('tr_ecdc_casesanddeath_properties_pl_ingest_ecdc_data_parameters_SourceRelativeUrl')]"
-						}
+						"parameters": {}
 					}
 				],
 				"type": "ScheduleTrigger",

@@ -17,12 +17,6 @@
 		"ls_edcd_properties_typeProperties_url": {
 			"value": "https://raw.githubusercontent.com/"
 		},
-		"tr_ecdc_casesanddeath_properties_pl_ingest_ecdc_data_parameters_SinkFileName": {
-			"value": "cases_deaths.csv"
-		},
-		"tr_ecdc_casesanddeath_properties_pl_ingest_ecdc_data_parameters_SourceRelativeUrl": {
-			"value": "cloudboxacademy/covid19/main/ecdc_data/cases_deaths.csv"
-		},
 		"tr_ingest_population_data_properties_typeProperties_scope": {
 			"value": "/subscriptions/1b899802-159d-4833-9968-c48a5e4b486d/resourceGroups/udemy.covid.lesson/providers/Microsoft.Storage/storageAccounts/covidlessonstorage"
 		}
