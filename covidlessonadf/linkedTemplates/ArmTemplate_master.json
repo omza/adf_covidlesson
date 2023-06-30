@@ -23,6 +23,14 @@
 			"type": "string",
 			"defaultValue": "https://raw.githubusercontent.com/"
 		},
+		"tr_ecdc_casesanddeath_properties_pl_ingest_ecdc_data_parameters_SinkFileName": {
+			"type": "string",
+			"defaultValue": "cases_deaths.csv"
+		},
+		"tr_ecdc_casesanddeath_properties_pl_ingest_ecdc_data_parameters_SourceRelativeUrl": {
+			"type": "string",
+			"defaultValue": "cloudboxacademy/covid19/main/ecdc_data/cases_deaths.csv"
+		},
 		"tr_ingest_population_data_properties_typeProperties_scope": {
 			"type": "string",
 			"defaultValue": "/subscriptions/1b899802-159d-4833-9968-c48a5e4b486d/resourceGroups/udemy.covid.lesson/providers/Microsoft.Storage/storageAccounts/covidlessonstorage"
@@ -65,6 +73,12 @@
 					},
 					"ls_edcd_properties_typeProperties_url": {
 						"value": "[parameters('ls_edcd_properties_typeProperties_url')]"
+					},
+					"tr_ecdc_casesanddeath_properties_pl_ingest_ecdc_data_parameters_SinkFileName": {
+						"value": "[parameters('tr_ecdc_casesanddeath_properties_pl_ingest_ecdc_data_parameters_SinkFileName')]"
+					},
+					"tr_ecdc_casesanddeath_properties_pl_ingest_ecdc_data_parameters_SourceRelativeUrl": {
+						"value": "[parameters('tr_ecdc_casesanddeath_properties_pl_ingest_ecdc_data_parameters_SourceRelativeUrl')]"
 					},
 					"tr_ingest_population_data_properties_typeProperties_scope": {
 						"value": "[parameters('tr_ingest_population_data_properties_typeProperties_scope')]"
