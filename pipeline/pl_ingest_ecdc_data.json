@@ -179,14 +179,6 @@
 				}
 			}
 		],
-		"variables": {
-			"sourceRelativeURL": {
-				"type": "String"
-			},
-			"sinkFileName": {
-				"type": "String"
-			}
-		},
 		"annotations": []
 	}
 }
