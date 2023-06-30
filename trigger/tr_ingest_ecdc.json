@@ -8,10 +8,6 @@
 				"pipelineReference": {
 					"referenceName": "pl_ingest_ecdc_data",
 					"type": "PipelineReference"
-				},
-				"parameters": {
-					"SinkFileName": "cases_deaths.csv",
-					"SourceRelativeUrl": "cloudboxacademy/covid19/main/ecdc_data/cases_deaths.csv"
 				}
 			}
 		],
