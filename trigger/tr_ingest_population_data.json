@@ -1,5 +1,5 @@
 {
-	"name": "tr_new_population_data",
+	"name": "tr_ingest_population_data",
 	"properties": {
 		"annotations": [],
 		"runtimeState": "Stopped",
