@@ -537,9 +537,8 @@
 					"recurrence": {
 						"frequency": "Day",
 						"interval": 1,
-						"startTime": "2023-06-30T13:00:00Z",
-						"timeZone": "UTC",
-						"schedule": {}
+						"startTime": "2023-06-29T11:00:00Z",
+						"timeZone": "UTC"
 					}
 				}
 			},
