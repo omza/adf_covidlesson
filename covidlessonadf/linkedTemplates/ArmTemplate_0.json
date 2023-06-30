@@ -18,6 +18,10 @@
 		"ls_blob_udemylessondatalake_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://udemylessondatalake.dfs.core.windows.net/"
+		},
+		"tr_ingest_population_data_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/1b899802-159d-4833-9968-c48a5e4b486d/resourceGroups/udemy.covid.lesson/providers/Microsoft.Storage/storageAccounts/covidlessonstorage"
 		}
 	},
 	"variables": {
@@ -313,6 +317,37 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/ds_population_by_age_tsv_gz')]",
 				"[concat(variables('factoryId'), '/datasets/ds_population_by_age_tsv')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/tr_ingest_population_data')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Stopped",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "pl_ingest_population_data",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "BlobEventsTrigger",
+				"typeProperties": {
+					"blobPathBeginsWith": "/population/blobs/",
+					"blobPathEndsWith": "population_by_age.tsv.gz",
+					"ignoreEmptyBlobs": true,
+					"scope": "[parameters('tr_ingest_population_data_properties_typeProperties_scope')]",
+					"events": [
+						"Microsoft.Storage.BlobCreated"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/pl_ingest_population_data')]"
 			]
 		}
 	]

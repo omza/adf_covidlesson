@@ -13,6 +13,9 @@
 		},
 		"ls_blob_udemylessondatalake_properties_typeProperties_url": {
 			"value": "https://udemylessondatalake.dfs.core.windows.net/"
+		},
+		"tr_ingest_population_data_properties_typeProperties_scope": {
+			"value": "/subscriptions/1b899802-159d-4833-9968-c48a5e4b486d/resourceGroups/udemy.covid.lesson/providers/Microsoft.Storage/storageAccounts/covidlessonstorage"
 		}
 	}
 }
