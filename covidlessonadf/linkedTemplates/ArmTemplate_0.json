@@ -19,6 +19,10 @@
 			"type": "string",
 			"defaultValue": "https://udemylessondatalake.dfs.core.windows.net/"
 		},
+		"ls_edcd_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://github.com"
+		},
 		"tr_ingest_population_data_properties_typeProperties_scope": {
 			"type": "string",
 			"defaultValue": "/subscriptions/1b899802-159d-4833-9968-c48a5e4b486d/resourceGroups/udemy.covid.lesson/providers/Microsoft.Storage/storageAccounts/covidlessonstorage"
@@ -54,6 +58,21 @@
 						"type": "SecureString",
 						"value": "[parameters('ls_blob_udemylessondatalake_accountKey')]"
 					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_edcd')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "HttpServer",
+				"typeProperties": {
+					"url": "[parameters('ls_edcd_properties_typeProperties_url')]",
+					"enableServerCertificateValidation": true,
+					"authenticationType": "Anonymous"
 				}
 			},
 			"dependsOn": []

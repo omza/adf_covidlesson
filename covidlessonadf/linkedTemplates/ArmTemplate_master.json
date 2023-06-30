@@ -23,6 +23,10 @@
 			"type": "string",
 			"defaultValue": "/subscriptions/1b899802-159d-4833-9968-c48a5e4b486d/resourceGroups/udemy.covid.lesson/providers/Microsoft.Storage/storageAccounts/covidlessonstorage"
 		},
+		"ls_edcd_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://github.com"
+		},
 		"containerUri": {
 			"type": "string",
 			"metadata": "URI to storage account containing linked ARM templates"
@@ -58,6 +62,9 @@
 					},
 					"ls_blob_udemylessondatalake_properties_typeProperties_url": {
 						"value": "[parameters('ls_blob_udemylessondatalake_properties_typeProperties_url')]"
+					},
+					"ls_edcd_properties_typeProperties_url": {
+						"value": "[parameters('ls_edcd_properties_typeProperties_url')]"
 					},
 					"tr_ingest_population_data_properties_typeProperties_scope": {
 						"value": "[parameters('tr_ingest_population_data_properties_typeProperties_scope')]"
