@@ -47,7 +47,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@activity('Lookup1').output.value",
+						"value": "@activity('Lookup ECDC Source File Config').output.value",
 						"type": "Expression"
 					},
 					"isSequential": true,
@@ -152,8 +152,14 @@
 							},
 							"inputs": [
 								{
-									"referenceName": "ds_edcd_casesanddeath_raw_csv",
-									"type": "DatasetReference"
+									"referenceName": "ds_edcd_raw",
+									"type": "DatasetReference",
+									"parameters": {
+										"relativeUrl": {
+											"value": "@variables('sourceRelativeURL')",
+											"type": "Expression"
+										}
+									}
 								}
 							],
 							"outputs": [
