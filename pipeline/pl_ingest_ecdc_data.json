@@ -3,75 +3,6 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy ECDC Data",
-				"type": "Copy",
-				"dependsOn": [],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"source": {
-						"type": "DelimitedTextSource",
-						"storeSettings": {
-							"type": "HttpReadSettings",
-							"requestMethod": "GET"
-						},
-						"formatSettings": {
-							"type": "DelimitedTextReadSettings"
-						}
-					},
-					"sink": {
-						"type": "DelimitedTextSink",
-						"storeSettings": {
-							"type": "AzureBlobFSWriteSettings"
-						},
-						"formatSettings": {
-							"type": "DelimitedTextWriteSettings",
-							"quoteAllText": true,
-							"fileExtension": ".txt"
-						}
-					},
-					"enableStaging": false,
-					"translator": {
-						"type": "TabularTranslator",
-						"typeConversion": true,
-						"typeConversionSettings": {
-							"allowDataTruncation": true,
-							"treatBooleanAsNumber": false
-						}
-					}
-				},
-				"inputs": [
-					{
-						"referenceName": "ds_edcd_casesanddeath_raw_csv",
-						"type": "DatasetReference",
-						"parameters": {
-							"relativeUrl": {
-								"value": "@pipeline().parameters.SourceRelativeUrl",
-								"type": "Expression"
-							}
-						}
-					}
-				],
-				"outputs": [
-					{
-						"referenceName": "ds_ecdc_datalake",
-						"type": "DatasetReference",
-						"parameters": {
-							"FileName": {
-								"value": "@pipeline().parameters.SinkFileName",
-								"type": "Expression"
-							}
-						}
-					}
-				]
-			},
-			{
 				"name": "Lookup ECDC Source File Config",
 				"type": "Lookup",
 				"dependsOn": [],
@@ -103,7 +34,7 @@
 				}
 			},
 			{
-				"name": "ForEach1",
+				"name": "For Each ECDC Source file",
 				"type": "ForEach",
 				"dependsOn": [
 					{
@@ -122,7 +53,7 @@
 					"isSequential": true,
 					"activities": [
 						{
-							"name": "Set variable1",
+							"name": "Set sourceRelativeURL",
 							"type": "SetVariable",
 							"dependsOn": [],
 							"policy": {
@@ -142,11 +73,11 @@
 							}
 						},
 						{
-							"name": "Set variable2",
+							"name": "sinkFileName",
 							"type": "SetVariable",
 							"dependsOn": [
 								{
-									"activity": "Set variable1",
+									"activity": "Set sourceRelativeURL",
 									"dependencyConditions": [
 										"Succeeded"
 									]
@@ -169,11 +100,11 @@
 							}
 						},
 						{
-							"name": "Copy ECDC Data_copy1",
+							"name": "Copy ECDC Data",
 							"type": "Copy",
 							"dependsOn": [
 								{
-									"activity": "Set variable2",
+									"activity": "sinkFileName",
 									"dependencyConditions": [
 										"Succeeded"
 									]
@@ -231,7 +162,7 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"FileName": {
-											"value": "@pipeline().parameters.SinkFileName",
+											"value": "@variables('sinkFileName')",
 											"type": "Expression"
 										}
 									}
@@ -242,6 +173,14 @@
 				}
 			}
 		],
+		"variables": {
+			"sourceRelativeURL": {
+				"type": "String"
+			},
+			"sinkFileName": {
+				"type": "String"
+			}
+		},
 		"annotations": []
 	}
 }
