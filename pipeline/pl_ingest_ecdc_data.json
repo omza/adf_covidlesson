@@ -1,5 +1,5 @@
 {
-	"name": "pl_ingest_ecdc_casesanddeath",
+	"name": "pl_ingest_ecdc_data",
 	"properties": {
 		"activities": [
 			{
@@ -54,12 +54,22 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "ds_edcd_casesanddeath_csv",
+						"referenceName": "ds_ecdc_datalake",
 						"type": "DatasetReference"
 					}
 				]
 			}
 		],
+		"variables": {
+			"SourceRelativeUrl": {
+				"type": "String",
+				"defaultValue": "cloudboxacademy/covid19/main/ecdc_data/hospital_admissions.csv"
+			},
+			"SinkFileName": {
+				"type": "String",
+				"defaultValue": "hospital_admissions.csv"
+			}
+		},
 		"annotations": []
 	}
 }
