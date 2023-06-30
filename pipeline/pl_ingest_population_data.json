@@ -70,7 +70,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"expression": {
-						"value": "@equals(activity('Get File Metadata').output.columnCount,14)",
+						"value": "@equals(activity('Get File Metadata').output.columnCount, 13)",
 						"type": "Expression"
 					},
 					"ifFalseActivities": [
@@ -81,7 +81,7 @@
 							"userProperties": [],
 							"typeProperties": {
 								"message": {
-									"value": "@\"Population File ColumnCount Error. \" + activity('Get File Metadata').output.columnCount",
+									"value": "@activity('Get File Metadata').output.columnCount",
 									"type": "Expression"
 								},
 								"errorCode": "500"
